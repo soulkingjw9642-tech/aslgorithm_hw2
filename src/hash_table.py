@@ -5,6 +5,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 
+def polynomial_hash_details(key: str, capacity: int) -> tuple[int, tuple[int, ...]]:
+    value = 0
+    steps = []
+    for character in key:
+        value = (31 * value + ord(character)) % capacity
+        steps.append(value)
+    return value, tuple(steps)
+
+
 @dataclass
 class _Node:
     key: str
@@ -16,6 +25,8 @@ class HashTable:
     """A hash table with a deterministic polynomial string hash."""
 
     _MAX_LOAD_FACTOR = 0.75
+    slot_label = "Bucket"
+    strategy = "separate chaining"
 
     def __init__(
         self, capacity: int = 8, max_load_factor: float | None = _MAX_LOAD_FACTOR
@@ -31,6 +42,7 @@ class HashTable:
         self._max_load_factor = max_load_factor
         self.last_lookup_probes = 0
         self.last_lookup_trace: list[str] = []
+        self.last_lookup_slots: list[int] = []
 
     def __len__(self) -> int:
         return self._size
@@ -46,12 +58,15 @@ class HashTable:
     def hash_details(self, key: str) -> tuple[int, tuple[int, ...]]:
         """Return the bucket index and each intermediate polynomial hash."""
         self._validate_key(key)
-        value = 0
-        steps = []
-        for character in key:
-            value = (31 * value + ord(character)) % self.capacity
-            steps.append(value)
-        return value, tuple(steps)
+        return polynomial_hash_details(key, self.capacity)
+
+    def slot_entries(self, index: int) -> tuple[tuple[str, str], ...]:
+        entries = []
+        node = self._buckets[index]
+        while node is not None:
+            entries.append((node.key, node.value))
+            node = node.next
+        return tuple(entries)
 
     def put(self, key: str, value: str) -> None:
         self._validate_key(key)
@@ -78,6 +93,7 @@ class HashTable:
         node = self._buckets[index]
         self.last_lookup_probes = 0
         self.last_lookup_trace = []
+        self.last_lookup_slots = [index]
         while node is not None:
             self.last_lookup_probes += 1
             self.last_lookup_trace.append(node.key)
@@ -92,6 +108,7 @@ class HashTable:
         node = self._buckets[index]
         self.last_lookup_probes = 0
         self.last_lookup_trace = []
+        self.last_lookup_slots = [index]
         while node is not None:
             self.last_lookup_probes += 1
             self.last_lookup_trace.append(node.key)

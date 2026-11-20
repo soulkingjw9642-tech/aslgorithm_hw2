@@ -6,10 +6,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, unquote, urlsplit
 
 from src.hash_table import HashTable
+from src.linear_probing import LinearProbingHashTable
 from src.shortener import Shortener
-
-TABLE = HashTable()
-SHORTENER = Shortener(TABLE)
 
 
 def _page(content: str) -> str:
@@ -23,9 +21,6 @@ def _page(content: str) -> str:
 
 
 class ShortenerHandler(BaseHTTPRequestHandler):
-    table = TABLE
-    shortener = SHORTENER
-
     def _send_html(self, status: int, content: str) -> None:
         body = _page(content).encode("utf-8")
         self.send_response(status)
@@ -55,7 +50,7 @@ class ShortenerHandler(BaseHTTPRequestHandler):
                 self._send_html(404, "<h1>Short link not found</h1>")
                 return
             try:
-                url = self.shortener.expand(code)
+                url = self.server.shortener.expand(code)
             except KeyError:
                 self._send_html(404, "<h1>Short link not found</h1>")
                 return
@@ -83,7 +78,7 @@ class ShortenerHandler(BaseHTTPRequestHandler):
             if not url_values:
                 raise ValueError("URL is required")
             url = url_values[0]
-            code = self.shortener.shorten(url)
+            code = self.server.shortener.shorten(url)
         except (UnicodeDecodeError, ValueError, TypeError) as exc:
             self._send_html(
                 400,
@@ -105,28 +100,39 @@ class ShortenerHandler(BaseHTTPRequestHandler):
 
     def _render_table(self) -> str:
         rows = []
-        for bucket_index, head in enumerate(self.table.buckets):
-            entries = []
-            node = head
-            while node is not None:
-                entries.append(self._render_entry(node.key, node.value))
-                node = node.next
+        table = self.server.table
+        for slot_index in range(table.capacity):
+            entries = [
+                self._render_entry(key, value)
+                for key, value in table.slot_entries(slot_index)
+            ]
             content = "".join(entries) if entries else "<li>empty</li>"
-            rows.append(f"<li><strong>Bucket {bucket_index}</strong><ul>{content}</ul></li>")
-        return "<h1>Hash table</h1><ol>" + "".join(rows) + "</ol>"
+            rows.append(
+                f"<li><strong>{table.slot_label} {slot_index}</strong>"
+                f"<ul>{content}</ul></li>"
+            )
+        return (
+            f"<h1>Hash table: {html.escape(table.strategy)}</h1><ol>"
+            + "".join(rows)
+            + "</ol>"
+        )
 
     def _render_entry(self, key: str, value: str) -> str:
-        bucket, steps = self.table.hash_details(key)
-        self.table.get(key)
-        visited = " &rarr; ".join(
-            html.escape(visited_key) for visited_key in self.table.last_lookup_trace
+        table = self.server.table
+        bucket, steps = table.hash_details(key)
+        table.get(key)
+        visited_slots = " &rarr; ".join(
+            str(index) for index in table.last_lookup_slots
+        )
+        visited_entries = " &rarr; ".join(
+            html.escape(entry) for entry in table.last_lookup_trace
         )
         calculations = []
         previous = 0
         for character, step in zip(key, steps):
             calculations.append(
                 html.escape(
-                    f"(31*{previous}+ord({character!r})) % {self.table.capacity} = {step}"
+                    f"(31*{previous}+ord({character!r})) % {table.capacity} = {step}"
                 )
             )
             previous = step
@@ -140,15 +146,31 @@ class ShortenerHandler(BaseHTTPRequestHandler):
             + html.escape(key)
             + "): "
             + calculation
-            + f"; bucket {bucket}; lookup visited: {visited}</li>"
+            + f"; initial slot {bucket}; lookup visited slots: {visited_slots}"
+            + f"; entries: {visited_entries}</li>"
         )
+
+
+class ShortenerHTTPServer(ThreadingHTTPServer):
+    def __init__(self, server_address: tuple[str, int], strategy: str) -> None:
+        if strategy == "chaining":
+            self.table = HashTable()
+        elif strategy == "linear":
+            self.table = LinearProbingHashTable()
+        else:
+            raise ValueError(f"unknown hash-table strategy: {strategy}")
+        self.shortener = Shortener(self.table)
+        super().__init__(server_address, ShortenerHandler)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the URL shortener web server.")
     parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument(
+        "--strategy", choices=("chaining", "linear"), default="chaining"
+    )
     args = parser.parse_args()
-    server = ThreadingHTTPServer(("0.0.0.0", args.port), ShortenerHandler)
+    server = ShortenerHTTPServer(("0.0.0.0", args.port), args.strategy)
     print(f"Serving on http://0.0.0.0:{args.port}")
     try:
         server.serve_forever()
