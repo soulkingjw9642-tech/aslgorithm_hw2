@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620">
+<title>Hash table lookup cost comparison</title>
+<rect width="100%" height="100%" fill="white"/>
+<text x="550" y="28" text-anchor="middle" font-family="sans-serif" font-size="20">Chaining vs. linear probing</text>
+<text x="550" y="600" text-anchor="middle" font-family="sans-serif" font-size="13">Load factor (alpha)</text>
+<text transform="translate(18 300) rotate(-90)" text-anchor="middle" font-family="sans-serif" font-size="13">Average visited nodes / slots</text>
+<text x="295.0" y="75" text-anchor="middle" font-family="sans-serif" font-size="16">Successful search</text>
+<line x1="80" y1="430.0" x2="510" y2="430.0" stroke="#ddd"/>
+<text x="72" y="434.0" text-anchor="end" font-family="sans-serif" font-size="10">0.0</text>
+<line x1="80" y1="345.0" x2="510" y2="345.0" stroke="#ddd"/>
+<text x="72" y="349.0" text-anchor="end" font-family="sans-serif" font-size="10">1.8</text>
+<line x1="80" y1="260.0" x2="510" y2="260.0" stroke="#ddd"/>
+<text x="72" y="264.0" text-anchor="end" font-family="sans-serif" font-size="10">3.5</text>
+<line x1="80" y1="175.0" x2="510" y2="175.0" stroke="#ddd"/>
+<text x="72" y="179.0" text-anchor="end" font-family="sans-serif" font-size="10">5.2</text>
+<line x1="80" y1="90.0" x2="510" y2="90.0" stroke="#ddd"/>
+<text x="72" y="94.0" text-anchor="end" font-family="sans-serif" font-size="10">7.0</text>
+<text x="80.0" y="448" text-anchor="middle" font-family="sans-serif" font-size="10">0.1</text>
+<text x="187.5" y="448" text-anchor="middle" font-family="sans-serif" font-size="10">0.3</text>
+<text x="295.0" y="448" text-anchor="middle" font-family="sans-serif" font-size="10">0.5</text>
+<text x="402.5" y="448" text-anchor="middle" font-family="sans-serif" font-size="10">0.7</text>
+<text x="510.0" y="448" text-anchor="middle" font-family="sans-serif" font-size="10">0.9</text>
+<line x1="80" y1="430" x2="510" y2="430" stroke="#333"/>
+<line x1="80" y1="90" x2="80" y2="430" stroke="#333"/>
+<polyline points="80.0,378.2 133.7,376.0 187.5,373.8 241.3,371.4 295.0,369.0 348.7,366.5 402.5,364.0 456.3,361.3 510.0,358.7" fill="none" stroke="#1769aa" stroke-width="2"/>
+<line x1="92" y1="472" x2="116" y2="472" stroke="#1769aa" stroke-width="2"/>
+<text x="122" y="476" font-family="sans-serif" font-size="10">Chaining measured</text>
+<polyline points="80.0,379.0 133.7,376.6 187.5,374.1 241.3,371.7 295.0,369.3 348.7,366.9 402.5,364.4 456.3,362.0 510.0,359.6" fill="none" stroke="#1769aa" stroke-width="2" stroke-dasharray="6 4"/>
+<line x1="92" y1="490" x2="116" y2="490" stroke="#1769aa" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="122" y="494" font-family="sans-serif" font-size="10">Chaining theory</text>
+<polyline points="80.0,377.6 133.7,374.4 187.5,370.4 241.3,364.5 295.0,357.5 348.7,344.9 402.5,324.6 456.3,276.5 510.0,110.9" fill="none" stroke="#d1495b" stroke-width="2"/>
+<line x1="92" y1="508" x2="116" y2="508" stroke="#d1495b" stroke-width="2"/>
+<text x="122" y="512" font-family="sans-serif" font-size="10">Linear measured</text>
+<polyline points="80.0,378.7 133.7,375.4 187.5,371.0 241.3,365.2 295.0,357.1 348.7,345.0 402.5,324.8 456.3,284.3 510.0,162.9" fill="none" stroke="#d1495b" stroke-width="2" stroke-dasharray="6 4"/>
+<line x1="92" y1="526" x2="116" y2="526" stroke="#d1495b" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="122" y="530" font-family="sans-serif" font-size="10">Linear theory</text>
+<text x="835.0" y="75" text-anchor="middle" font-family="sans-serif" font-size="16">Unsuccessful search</text>
+<line x1="620" y1="430.0" x2="1050" y2="430.0" stroke="#ddd"/>
+<text x="612" y="434.0" text-anchor="end" font-family="sans-serif" font-size="10">0.0</text>
+<line x1="620" y1="345.0" x2="1050" y2="345.0" stroke="#ddd"/>
+<text x="612" y="349.0" text-anchor="end" font-family="sans-serif" font-size="10">16.2</text>
+<line x1="620" y1="260.0" x2="1050" y2="260.0" stroke="#ddd"/>
+<text x="612" y="264.0" text-anchor="end" font-family="sans-serif" font-size="10">32.5</text>
+<line x1="620" y1="175.0" x2="1050" y2="175.0" stroke="#ddd"/>
+<text x="612" y="179.0" text-anchor="end" font-family="sans-serif" font-size="10">48.8</text>
+<line x1="620" y1="90.0" x2="1050" y2="90.0" stroke="#ddd"/>
+<text x="612" y="94.0" text-anchor="end" font-family="sans-serif" font-size="10">65.0</text>
+<text x="620.0" y="448" text-anchor="middle" font-family="sans-serif" font-size="10">0.1</text>
+<text x="727.5" y="448" text-anchor="middle" font-family="sans-serif" font-size="10">0.3</text>
+<text x="835.0" y="448" text-anchor="middle" font-family="sans-serif" font-size="10">0.5</text>
+<text x="942.5" y="448" text-anchor="middle" font-family="sans-serif" font-size="10">0.7</text>
+<text x="1050.0" y="448" text-anchor="middle" font-family="sans-serif" font-size="10">0.9</text>
+<line x1="620" y1="430" x2="1050" y2="430" stroke="#333"/>
+<line x1="620" y1="90" x2="620" y2="430" stroke="#333"/>
+<polyline points="620.0,429.5 673.7,428.9 727.5,428.4 781.3,428.0 835.0,427.4 888.7,426.9 942.5,426.4 996.3,425.9 1050.0,425.3" fill="none" stroke="#1769aa" stroke-width="2"/>
+<line x1="632" y1="472" x2="656" y2="472" stroke="#1769aa" stroke-width="2"/>
+<text x="662" y="476" font-family="sans-serif" font-size="10">Chaining measured</text>
+<polyline points="620.0,429.5 673.7,429.0 727.5,428.4 781.3,427.9 835.0,427.4 888.7,426.9 942.5,426.3 996.3,425.8 1050.0,425.3" fill="none" stroke="#1769aa" stroke-width="2" stroke-dasharray="6 4"/>
+<line x1="632" y1="490" x2="656" y2="490" stroke="#1769aa" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="662" y="494" font-family="sans-serif" font-size="10">Chaining theory</text>
+<polyline points="620.0,424.2 673.7,423.2 727.5,422.0 781.3,420.1 835.0,417.2 888.7,411.6 942.5,399.3 996.3,358.6 1050.0,120.3" fill="none" stroke="#d1495b" stroke-width="2"/>
+<line x1="632" y1="508" x2="656" y2="508" stroke="#d1495b" stroke-width="2"/>
+<text x="662" y="512" font-family="sans-serif" font-size="10">Linear measured</text>
+<polyline points="620.0,424.2 673.7,423.3 727.5,422.0 781.3,420.1 835.0,416.9 888.7,411.0 942.5,398.3 996.3,362.0 1050.0,166.0" fill="none" stroke="#d1495b" stroke-width="2" stroke-dasharray="6 4"/>
+<line x1="632" y1="526" x2="656" y2="526" stroke="#d1495b" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="662" y="530" font-family="sans-serif" font-size="10">Linear theory</text>
+</svg>

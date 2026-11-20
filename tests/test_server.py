@@ -1,24 +1,14 @@
 import http.client
 import threading
 import unittest
-from http.server import ThreadingHTTPServer
 from urllib.parse import urlencode
 
-from src.hash_table import HashTable
-from src.server import ShortenerHandler
-from src.shortener import Shortener
-
-
-class TestShortenerHandler(ShortenerHandler):
-    table = HashTable()
-    shortener = Shortener(table)
+from src.server import ShortenerHTTPServer
 
 
 class ServerTests(unittest.TestCase):
     def setUp(self):
-        TestShortenerHandler.table = HashTable()
-        TestShortenerHandler.shortener = Shortener(TestShortenerHandler.table)
-        self.server = ThreadingHTTPServer(("127.0.0.1", 0), TestShortenerHandler)
+        self.server = ShortenerHTTPServer(("127.0.0.1", 0), "chaining")
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
         self.connection = http.client.HTTPConnection(*self.server.server_address)
@@ -60,6 +50,37 @@ class ServerTests(unittest.TestCase):
         self.assertIn(b"ord(", table_page)
         self.assertIn(b"lookup visited", table_page)
         self.assertIn(b"https://example.com/path", table_page)
+
+    def test_linear_strategy_uses_slot_view(self):
+        linear_server = ShortenerHTTPServer(("127.0.0.1", 0), "linear")
+        linear_thread = threading.Thread(
+            target=linear_server.serve_forever, daemon=True
+        )
+        linear_thread.start()
+        connection = http.client.HTTPConnection(*linear_server.server_address)
+        try:
+            connection.request(
+                "POST",
+                "/",
+                body=urlencode({"url": "https://example.com/linear"}),
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
+            )
+            response = connection.getresponse()
+            self.assertEqual(response.status, 200)
+            response.read()
+
+            connection.request("GET", "/table")
+            response = connection.getresponse()
+            table_page = response.read()
+            self.assertEqual(response.status, 200)
+            self.assertIn(b"linear probing", table_page)
+            self.assertIn(b"Slot 0", table_page)
+            self.assertIn(b"lookup visited slots", table_page)
+        finally:
+            connection.close()
+            linear_server.shutdown()
+            linear_server.server_close()
+            linear_thread.join()
 
     def test_invalid_url_and_unknown_code_return_errors(self):
         self.connection.request(

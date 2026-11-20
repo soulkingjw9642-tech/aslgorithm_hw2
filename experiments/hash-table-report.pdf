@@ -1,0 +1,77 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 1488 >>
+stream
+BT /F1 16 Tf 48 750 Td (Hash Table Lookup Cost: Chaining vs. Linear Probing) Tj ET
+BT /F1 10 Tf 48 725 Td (Question: how does load factor affect average successful and failed lookups?) Tj ET
+BT /F1 10 Tf 48 700 Td (Method) Tj ET
+BT /F1 10 Tf 48 675 Td (- Capacity: 10007 slots; target alpha values: 0.1 through 0.9.) Tj ET
+BT /F1 10 Tf 48 650 Td (- Same deterministic key and miss sets were used for both implementations.) Tj ET
+BT /F1 10 Tf 48 625 Td (- The experiment used a fixed capacity and did not resize during measurement.) Tj ET
+BT /F1 10 Tf 48 600 Td (- Each stored key and each absent key was queried once; probes count visited) Tj ET
+BT /F1 10 Tf 48 575 Td (  nodes for chaining and visited slots for linear probing.) Tj ET
+BT /F1 10 Tf 48 550 Td (Theory \(uniform hashing\)) Tj ET
+BT /F1 10 Tf 48 525 Td (- Chaining: success 1 + alpha/2; failure alpha.) Tj ET
+BT /F1 10 Tf 48 500 Td (- Linear probing: success \(1 + 1/\(1-alpha\)\)/2;) Tj ET
+BT /F1 10 Tf 48 475 Td (  failure \(1 + 1/\(1-alpha\)^2\)/2.) Tj ET
+BT /F1 10 Tf 48 450 Td (Selected results: measured average probes) Tj ET
+BT /F1 10 Tf 48 425 Td (alpha   chain success   linear success   chain failure   linear failure) Tj ET
+BT /F1 10 Tf 48 400 Td (0.1       1.066           1.079            0.095           1.116) Tj ET
+BT /F1 10 Tf 48 375 Td (0.5       1.255           1.493            0.499           2.452) Tj ET
+BT /F1 10 Tf 48 350 Td (0.9       1.467           6.569            0.891           59.210) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 1547 >>
+stream
+BT /F1 16 Tf 48 750 Td (Interpretation) Tj ET
+BT /F1 10 Tf 48 725 Td (- Chaining grows gradually: at alpha 0.9 its measured success/failure costs) Tj ET
+BT /F1 10 Tf 48 700 Td (  are 1.467/0.891, near theory) Tj ET
+BT /F1 10 Tf 48 675 Td (  1.450/0.900.) Tj ET
+BT /F1 10 Tf 48 650 Td (- Linear probing is efficient at low load, but primary clustering makes) Tj ET
+BT /F1 10 Tf 48 625 Td (  failed searches grow sharply near a full table.) Tj ET
+BT /F1 10 Tf 48 600 Td (- At alpha 0.9, linear success/failure costs are 6.569/59.210;) Tj ET
+BT /F1 10 Tf 48 575 Td (  theory predicts 5.499/50.470.) Tj ET
+BT /F1 10 Tf 48 550 Td (- At alpha 0.9, linear failure is 59.210 vs. 50.470 expected;) Tj ET
+BT /F1 10 Tf 48 525 Td (  deterministic polynomial hashes and finite samples depart from uniform) Tj ET
+BT /F1 10 Tf 48 500 Td (  independent hashing, with clustering amplifying the difference at high load.) Tj ET
+BT /F1 10 Tf 48 475 Td (- The cost definitions differ slightly: chaining counts examined nodes;) Tj ET
+BT /F1 10 Tf 48 450 Td (  linear probing counts every inspected slot, including the empty slot) Tj ET
+BT /F1 10 Tf 48 425 Td (  that terminates an unsuccessful search.) Tj ET
+BT /F1 10 Tf 48 400 Td (Conclusion) Tj ET
+BT /F1 10 Tf 48 375 Td (- Keep load factor moderate for linear probing. Chaining tolerates heavier) Tj ET
+BT /F1 10 Tf 48 350 Td (  loads more gracefully, at the cost of linked-list storage and pointer walks.) Tj ET
+BT /F1 10 Tf 48 325 Td (Reproducibility: make experiment; see comparison_results.csv and .svg.) Tj ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000127 00000 n 
+0000000197 00000 n 
+0000000323 00000 n 
+0000001862 00000 n 
+0000001988 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+3586
+%%EOF
