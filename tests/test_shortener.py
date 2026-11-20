@@ -21,6 +21,8 @@ class ShortenerTests(unittest.TestCase):
             "ftp://example.com",
             "http:///missing-host",
             "https://",
+            "https://example.com/a b",
+            "https://example.com/\r\nInjected: header",
         ):
             with self.subTest(url=url), self.assertRaises(ValueError):
                 shortener.shorten(url)

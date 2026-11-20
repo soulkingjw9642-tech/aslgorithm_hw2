@@ -30,8 +30,12 @@ class Shortener:
     def _validate_url(url: str) -> None:
         if not isinstance(url, str):
             raise TypeError("url must be a string")
-        if not url or url != url.strip():
-            raise ValueError("url must not be empty or have surrounding whitespace")
+        if not url or any(
+            ord(character) <= 0x20 or ord(character) == 0x7F for character in url
+        ):
+            raise ValueError(
+                "url must not be empty or contain whitespace or control characters"
+            )
         try:
             parsed = urlsplit(url)
             hostname = parsed.hostname
