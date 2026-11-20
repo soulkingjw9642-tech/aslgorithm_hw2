@@ -17,13 +17,18 @@ class HashTable:
 
     _MAX_LOAD_FACTOR = 0.75
 
-    def __init__(self, capacity: int = 8) -> None:
+    def __init__(
+        self, capacity: int = 8, max_load_factor: float | None = _MAX_LOAD_FACTOR
+    ) -> None:
         if not isinstance(capacity, int) or isinstance(capacity, bool):
             raise TypeError("capacity must be an integer")
         if capacity < 1:
             raise ValueError("capacity must be positive")
+        if max_load_factor is not None and max_load_factor <= 0:
+            raise ValueError("max_load_factor must be positive or None")
         self._buckets: list[_Node | None] = [None] * capacity
         self._size = 0
+        self._max_load_factor = max_load_factor
         self.last_lookup_probes = 0
         self.last_lookup_trace: list[str] = []
 
@@ -61,7 +66,10 @@ class HashTable:
 
         self._buckets[index] = _Node(key, value, self._buckets[index])
         self._size += 1
-        if self._size / self.capacity > self._MAX_LOAD_FACTOR:
+        if (
+            self._max_load_factor is not None
+            and self._size / self.capacity > self._max_load_factor
+        ):
             self._resize(self.capacity * 2)
 
     def get(self, key: str) -> str:
